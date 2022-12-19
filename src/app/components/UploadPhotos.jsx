@@ -1,11 +1,12 @@
 import React, {useState} from "react";
-import {storage} from "./firebase";
+import {storage} from "../../firebase/firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 
-const FirebaseData = () => {
+const UploadPhotos = () => {
 
     const [imgUrl, setImgUrl] = useState(null);
     const [progresspercent, setProgresspercent] = useState(0);
+    console.log("----imgUrl", imgUrl);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,10 +34,15 @@ const FirebaseData = () => {
         );
     };
 
+    const handleReadImage = () => {
+// Create a reference from a Google Cloud Storage URI
+//         const gsReference = ref(storage, "gs://bucket/images/stars.jpg");
+
+    };
 
     return (
         <div>
-            <form onSubmit={handleSubmit} className="form">
+            <form onSubmit={handleSubmit}>
                 <input type="file"/>
                 <button type="submit">Upload</button>
             </form>
@@ -48,12 +54,13 @@ const FirebaseData = () => {
             }
             {
                 imgUrl &&
-                <img src={imgUrl} alt="uploaded file" height={200}/>
+                <img src={imgUrl} alt="uploaded file" height={100}/>
             }
+            <button onClick={handleReadImage}></button>
         </div>
     );
 };
 
-export default FirebaseData;
+export default UploadPhotos;
 
 

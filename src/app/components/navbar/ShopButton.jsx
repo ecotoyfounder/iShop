@@ -8,7 +8,7 @@ const ShopButton = ({link}) => {
     return (
         <NavLink to={link}>
             <div className={styles.parent}>
-                <button className={styles.button}>Shop</button>
+                <button className={styles.buttonPrimary}>Shop</button>
             </div>
         </NavLink>
     );

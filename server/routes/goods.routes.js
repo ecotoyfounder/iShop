@@ -2,10 +2,6 @@ const express = require("express");
 const Good = require("../models/Good");
 const router = express.Router({mergeParams: true});
 
-// const upload = multer({
-//     storage: Storage
-// }).single("abcCards");
-
 router.get("/", async (req, res) => {
     try {
         const list = await Good.find();
@@ -17,27 +13,53 @@ router.get("/", async (req, res) => {
     }
 });
 
-// router.post("/upload", async (req, res) => {
-//     try {
-//         upload(req, res, (err) => {
-//             if (err) {
-//                 console.log(err);
-//             } else {
-//                 const newGood = new Good({
-//                     name: req.body.name,
-//                     image: {
-//                         data: req.file.filename,
-//                         contentType: "image/png"
-//                     }
-//                 });
-//                 newGood.save()
-//                     .then(() => res.send("successfully uploaded"))
-//                     .catch(err => console.log(err));
-//             }
-//         });
-//     } catch (e) {
-//
-//     }
-// });
+router.post("/createGood", async (req, res) => {
+
+    const good = req.body;
+    try {
+        const exists = await Good.findOne({name: good.name});
+
+        if (exists) {
+            return res.status(400).send(`${good.name} exists`);
+        }
+
+        const newGood = await Good.create(good);
+
+        res.status(200).send(newGood);
+    } catch (e) {
+        res.status(500).json({
+            message: "Server has error. Try later"
+        });
+    }
+});
+
+router.patch("/updateGood", async (req, res) => {
+    const good = req.body;
+    try {
+        const updateGood = await Good.findByIdAndUpdate(good._id, good, {
+            new: true,
+        });
+
+        res.status(200).send(updateGood);
+    } catch (e) {
+        res.status(500).json({
+            message: "Server has error. Try later"
+        });
+    }
+});
+
+router.delete("/:goodId", async (req, res) => {
+    const {goodId} = req.params;
+    try {
+        const removeGood = await Good.findById(goodId);
+        await removeGood.remove();
+
+        res.status(200).send(null);
+    } catch (e) {
+        res.status(500).json({
+            message: "Server has error. Try later"
+        });
+    }
+});
 
 module.exports = router;

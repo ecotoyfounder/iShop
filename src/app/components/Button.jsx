@@ -1,18 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "../../App.module.scss";
 
 
-const Button = ({label, children}) => {
+const Button = ({label, children, onClick}) => {
     return (
-        <div className={styles.parent}>
-            <button
-                type="submit"
-                className={`${styles.buttonPrimary} + m-auto mt-10`}
-            >
-                {label || children || "button"}
-            </button>
-        </div>
+        <button
+            type="submit"
+            className="btn-primary m-auto mb-6 mt-10 block px-4"
+            onClick={onClick}
+        >
+            {label || children || "button"}
+        </button>
     );
 };
 
@@ -22,6 +20,7 @@ Button.propTypes = {
         PropTypes.node
     ]),
     label: PropTypes.string,
+    onClick: PropTypes.func
 };
 
 export default Button;

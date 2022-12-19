@@ -1,7 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {fatchAllGoods} from "../store/goodSlice";
-import {deleteGoodFromCart} from "../store/cartSlice";
+import {deleteGood, fatchAllGoods} from "../store/goodSlice";
 import {Link, useNavigate} from "react-router-dom";
 import Button from "../components/Button";
 
@@ -10,24 +9,23 @@ const GoodsList = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const handleRemoveFromCart = (good) => {
-        dispatch(deleteGoodFromCart(good));
+    const handleDeleteGood = (good) => {
+        dispatch(deleteGood(good));
     };
     const createNewGood = () => {
         navigate("/admin/good/new");
     };
 
     return (
-        <div className="m-auto text-lg font-bold text-darkColor ">
-            <Button label="Create new good" onClick={createNewGood}/>
+        <div className="m-auto text-lg font-bold text-darkColor">
 
             <div
                 className="rounded-xl justify-between relative bg-bgDark bg-opacity-10 shadow-lg mt-5 p-4 text-darkColor">
                 {goods.map(el =>
                     <div key={el._id}
                          className="flex justify-between rounded-xl relative bg-bgDark bg-opacity-25 m-3 p-4 text-darkColor">
-                        <Link
-                            to={`/admin/good/${el._id}/edit`}>{el.name}
+                        <Link className="hover:text-green-600 "
+                              to={`/admin/good/${el._id}/edit`}>{el.name}
                         </Link>
                         <div className="flex justify-end">
                             <Link className="mr-3 pt-0.5"
@@ -39,7 +37,7 @@ const GoodsList = () => {
                                           d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
                                 </svg>
                             </Link>
-                            <button onClick={() => handleRemoveFromCart(el)}
+                            <button onClick={() => handleDeleteGood(el._id)}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      strokeWidth={1.5}
@@ -53,6 +51,10 @@ const GoodsList = () => {
                     </div>)}
 
             </div>
+            <div className="flex justify-end">
+                <Button label="Create new good" onClick={createNewGood}/>
+            </div>
+
         </div>
     );
 };

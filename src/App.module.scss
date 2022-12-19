@@ -3,8 +3,13 @@
   .button {
     @apply btn-primary;
   }
+
   .buttonPrimary {
     @apply btn-primary;
+  }
+
+  .buttonSecondary {
+    @apply btn-secondary;
   }
 
   .buttonLight {

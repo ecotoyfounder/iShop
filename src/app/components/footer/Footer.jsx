@@ -12,10 +12,10 @@ import facebookImg from "../ui/images/Fb_icon.png";
 const Footer = () => {
     return (
         <div
-            className="flex justify-end z-50 sticky relative backdrop-blur transition-colors duration-500c">
+            className="flex justify-end absolute bottom-0 z-50 mt-10 py-3 h-20 sticky backdrop-blur transition-colors duration-500c">
 
             <NavLink to="admin"
-                     className="bg-primary mr-10 text-light text-xl text-center px-2 py-0.5 rounded-full h-9 w-50 hover:bg-secondary hover:text-bgLight hover:font-medium">Admin
+                     className="btn-footer mr-10 text-center pt-1">Admin
             </NavLink>
             <YouTubeButton src={youtubeImg}/>
             <InstagramButton link="/" src={instImg}/>

@@ -45,7 +45,8 @@ router.post("/signUp", [
             const tokens = tokenService.generate({_id: newUser._id});
             await tokenService.save(newUser._id, tokens.refreshToken);
 
-            res.status(201).send({...tokens, userId: newUser._id});
+            res.status(201).send({tokens: {...tokens, userId: newUser._id}, user: newUser});
+
 
         } catch (e) {
             res.status(500).json({
@@ -94,7 +95,7 @@ router.post("/signInWithPassword", [
             const tokens = tokenService.generate({_id: existingUser._id});
             await tokenService.save(existingUser._id, tokens.refreshToken);
 
-            return res.status(200).send({...tokens, userId: existingUser._id});
+            return res.status(200).send({tokens: {...tokens, userId: existingUser._id}, user: existingUser});
 
         } catch (e) {
             res.status(500).json({
@@ -107,6 +108,27 @@ router.post("/signInWithPassword", [
 function isTokenInvalid(data, dbToken) {
     return !data || !dbToken || data._id !== dbToken?.user?.toString();
 }
+
+router.post("/signInWithToken", async (req, res) => {
+    const {userId: _id, accessToken, refreshToken, expiresIn} = req.body;
+    const isValidAccessToken = tokenService.validateAccess(accessToken);
+    const isValidRefreshToken = tokenService.validateRefresh(refreshToken);
+    console.log({userId: _id, accessToken, refreshToken, expiresIn});
+    if (!isValidAccessToken && !isValidRefreshToken) {
+        return res.status(400).send({
+            error: {
+                message: "TOKENS_IS_NOT_VALID",
+                code: 400,
+            },
+        });
+    }
+
+    const existingUser = await User.findOne({_id});
+    res.status(200).send({
+        tokens: {userId: _id, accessToken, refreshToken, expiresIn},
+        user: existingUser,
+    });
+});
 
 router.post("/token", async (req, res) => {
     try {

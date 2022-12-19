@@ -1,14 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Navigate, useLocation} from "react-router-dom";
+import {Navigate} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {getIsLoggedIn} from "../store/authSlice";
 
 const PrivatePage = ({children}) => {
 
-    const location = useLocation();
-    const auth = false;
+    const authUser = useSelector(getIsLoggedIn());
 
-    if (!auth) {
-        return <Navigate to="/login" state={{from: location}}/>;
+    if (!authUser) {
+        return <Navigate to="/login"/>;
     }
 
     return children;

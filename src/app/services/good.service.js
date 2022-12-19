@@ -1,32 +1,41 @@
+import config from "../../config.json";
 import httpService from "./http.service";
-import localStorageService from "./localStorage.service";
 
-const goodEndpoint = "good/";
+const url = config.apiEndpoint + "/good";
 
 const goodService = {
-    get: async () => {
-        const {data} = await httpService.get(goodEndpoint);
-        return data;
+    async fetchAllGoods() {
+        try {
+            const {data} = await httpService.get(url);
+            return data;
+        } catch (error) {
+            throw new Error(error.response.data.error.message);
+        }
     },
-    create: async (payload) => {
-        const {data} = await httpService.put(
-            goodEndpoint + payload._id,
-            payload
-        );
-        return data;
+    async createGood(good) {
+        try {
+            const {data} = await httpService.post(url + "/createGood", good);
+            return data;
+        } catch (e) {
+            throw new Error(e.response.data.error.message);
+        }
     },
-    getCurrentGood: async () => {
-        const {data} = await httpService.get(
-            goodEndpoint + localStorageService.getGoodId()
-        );
-        return data;
+    async updateGood(good) {
+        try {
+            const {data} = await httpService.patch(url + "/updateGood", good);
+            return data;
+        } catch (e) {
+            throw new Error(e.response.data.error.message);
+        }
     },
-    update: async (payload) => {
-        const {data} = await httpService.patch(
-            goodEndpoint + localStorageService.getGoodId(),
-            payload
-        );
-        return data;
+    async deleteGood(id) {
+        try {
+            const {data} = await httpService.delete(url + `/${id}`);
+            return data;
+        } catch (e) {
+            throw new Error(e.response.data.error.message);
+        }
     }
 };
+
 export default goodService;

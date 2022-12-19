@@ -1,36 +1,34 @@
-import axios from "axios";
-import localStorageService from "./localStorage.service";
+import httpService from "./http.service";
 import config from "../../config.json";
 
-const httpAuth = axios.create({
-    baseURL: config.apiEndpoint + "/auth/",
-    params: {
-        key: process.env.REACT_APP_FIREBASE_KEY
-    }
-});
+const url = config.apiEndpoint + "/auth";
 
 const authService = {
-    register: async (payload) => {
-        const {data} = await httpAuth.post(`signUp`, payload);
-        return data;
+    async create(user) {
+        try {
+            const {data} = await httpService.post(url + "/signUp", user);
+            return data;
+        } catch (error) {
+            throw new Error(error.response.data.error.message);
+        }
     },
-    login: async ({email, password}) => {
-        const {data} = await httpAuth.post(`signInWithPassword`, {
-            email,
-            password,
-            returnSecureToken: true
-        });
-        return data;
+
+    async loginTokens(tokens) {
+        try {
+            const {data} = await httpService.post(url + "/signInWithToken", tokens);
+            return data;
+        } catch (e) {
+            throw new Error(e.response.data.error.message);
+        }
     },
-    refresh: async () => {
-        const {data} = await httpAuth.post("token", {
-            grant_type: "refresh_token",
-            refresh_token: localStorageService.getRefreshToken()
-        });
-        return data;
-    },
-    logout: async () => {
-        localStorage.removeItem("user");
+
+    async login(user) {
+        try {
+            const {data} = await httpService.post(url + "/signInWithPassword", user);
+            return data;
+        } catch (error) {
+            throw new Error(error.response.data.error.message);
+        }
     }
 };
 

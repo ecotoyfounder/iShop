@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import * as Yup from "yup";
-import {signUp} from "../store/users";
 import Card from "../components/Card";
 import TextField from "../components/TextField";
 import Button from "../components/Button";
-import {NavLink} from "react-router-dom";
+import {Navigate, NavLink, useLocation} from "react-router-dom";
+import {getIsLoggedIn, logIn} from "../store/authSlice";
 
-const signUpSchema = Yup.object({
-    username: Yup.string()
-        .required("Required"),
+const signUpSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string()
         .min(8, "Password must contain at least 8 symbols")
@@ -17,8 +15,11 @@ const signUpSchema = Yup.object({
 });
 
 const LogInPage = () => {
-
+    const isLoggedIn = useSelector(getIsLoggedIn());
     const dispatch = useDispatch();
+
+    const location = useLocation();
+    const fromPage = location.state?.from?.pathname || "/";
 
     const [errors, setErrors] = useState({});
     const [data, setData] = useState({
@@ -33,30 +34,29 @@ const LogInPage = () => {
         }));
     };
 
-    const validate = () => {
-        const errors = (data, signUpSchema);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
     useEffect(() => {
         validate();
     }, [data]);
+
+    const validate = () => {
+        signUpSchema
+            .validate(data)
+            .then(() => {
+                setErrors({});
+            })
+            .catch((err) => setErrors({[err.path]: err.message}));
+    };
 
     const isValid = Object.keys(errors).length === 0;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const isValid = validate();
-        if (!isValid) return;
 
-        const newData = {
-            ...data
-        };
-        dispatch(signUp(newData));
+        if (!isValid) return;
+        dispatch(logIn(data));
     };
 
-    return (
+    return (!isLoggedIn ?
         <div
             className="mt-20 m-auto p-10 justify-center text-primary max-w-lg rounded-3xl bg-bgDark bg-opacity-20 shadow-bgDark shadow-md">
             <Card.Title>Log In</Card.Title>
@@ -64,7 +64,7 @@ const LogInPage = () => {
             <form onSubmit={handleSubmit}>
                 <TextField
                     label="Email"
-                    email="email"
+                    name="email"
                     value={data.email}
                     onChange={handleChange}
                     error={errors.email}
@@ -80,11 +80,11 @@ const LogInPage = () => {
                 <Button disabled={!isValid}>Log In</Button>
 
             </form>
-            <NavLink className="text-center m-auto underline" to="/auth/signUp">
+            <NavLink className="text-center m-auto underline" to="/signup">
                 Create an account
             </NavLink>
         </div>
-    );
+        : <Navigate to={fromPage}/>);
 };
 
 export default LogInPage;

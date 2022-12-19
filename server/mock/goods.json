@@ -2,50 +2,50 @@
   {
     "_id": "00000001",
     "name": "Russian Alphabet",
-    "img": "../imgs/rus-abc.png",
+    "image": "images/rus-abc.png",
     "price": 29.99,
-    "currency": "€"
+    "category": "10000001"
   },
   {
     "_id": "00000002",
     "name": "ABC Blocks",
-    "img": "../imgs/ABC_Blocks.jpg",
+    "image": "/ABC_Blocks.jpg",
     "price": 229.99,
-    "currency": "€"
+    "category": "10000002"
   },
   {
     "_id": "00000003",
     "name": "Forest Blocks",
-    "img": "../imgs/Forest_Cub.JPG",
+    "image": "/Forest_Cub.JPG",
     "price": 299.99,
-    "currency": "€"
+    "category": "10000002"
   },
   {
     "_id": "00000004",
     "name": "Jungle Blocks",
-    "img": "../imgs/Chameleon.jpg",
+    "image": "/Chameleon.jpg",
     "price": 299.99,
-    "currency": "€"
+    "category": "10000002"
   },
   {
     "_id": "00000005",
     "name": "Kitty Eat Teether",
-    "img": "../imgs/Kitty_eat.JPG",
+    "image": "/Kitty_eat.JPG",
     "price": 39.99,
-    "currency": "€"
+    "category": "10000003"
   },
   {
     "_id": "00000006",
-    "name": "Typhoon in the World of Numbers",
-    "img": "../imgs/Typhoon.jpg",
+    "name": "Typhoon",
+    "image": "/Typhoon.jpg",
     "price": 59.99,
-    "currency": "€"
+    "category": "10000004"
   },
   {
     "_id": "00000007",
     "name": "English Alphabet",
-    "img": "../imgs/ABC_Cards_Dog.jpg",
+    "image": "/ABC_Cards_Dog.jpg",
     "price": 29.99,
-    "currency": "€"
+    "category": "10000001"
   }
 ]

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const SearchButton = ({link, src}) => {
     return (
         <NavLink to={link}>
-            <img src={src} className="w-10 mr-10"/>
+            <img src={src} className="w-10 mr-10 focus-visible:ring"/>
         </NavLink>
     );
 };

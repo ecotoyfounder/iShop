@@ -9,13 +9,12 @@ const schema = new Schema({
         type: Number,
         required: true
     },
-    currency: {
+    category: {
         type: String,
         required: true
     },
-    img: {
+    image: {
         type: String,
-        required: true
     }
 }, {
     timestamps: true

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const InstagramButton = ({src}) => {
     return (
-        <a href="src/app/components/footer/InstagramButton" rel="noreferrer" target="_blank">
+        <a href="https://www.instagram.com/ecotoyofficial/" rel="noreferrer" target="_blank">
             <img src={src} className="w-9 ml-5 hover:animate-pulse"/>
         </a>
     );

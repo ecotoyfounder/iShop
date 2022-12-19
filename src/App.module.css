@@ -1,15 +1,15 @@
 .parent {
   @apply m-8 mt-0;
 }
-
 .parent .button {
   @apply btn-primary;
 }
-
 .parent .buttonPrimary {
   @apply btn-primary;
 }
-
+.parent .buttonSecondary {
+  @apply btn-secondary;
+}
 .parent .buttonLight {
   @apply btn-light;
 }

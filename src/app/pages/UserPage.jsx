@@ -2,7 +2,7 @@ import React from "react";
 import {useSelector} from "react-redux";
 import {getUserById} from "../store/users";
 import PropTypes from "prop-types";
-import CartPage from "./CartPage";
+import PrivatePage from "../hoc/PrivatePage";
 import GoodsCard from "../components/ui/GoogsCard";
 
 const UserPage = ({userId}) => {
@@ -12,7 +12,7 @@ const UserPage = ({userId}) => {
     if (user) {
         return (
             <div className="container">
-                <CartPage user={user}/>
+                <PrivatePage user={user}/>
                 <GoodsCard data={user.good}/>
             </div>
         );
