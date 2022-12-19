@@ -1,0 +1,21 @@
+.parent {
+  @apply m-8 mt-0;
+}
+
+.parent .button {
+  @apply btn-primary;
+}
+
+.parent .buttonPrimary {
+  @apply btn-primary;
+}
+
+.parent .buttonLight {
+  @apply btn-light;
+}
+
+.navImg {
+  @apply nav-img;
+}
+
+/*# sourceMappingURL=App.module.css.map */

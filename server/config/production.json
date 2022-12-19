@@ -1,0 +1,6 @@
+{
+  "port": 8080,
+  "mongoUri": "mongodb+srv://pavelvolkov:volkov-database-1@cluster0.rdxoyy4.mongodb.net/?retryWrites=true&w=majority",
+  "accessSecretToken": "some secret key",
+  "refreshSecretToken": "refreshed key"
+}

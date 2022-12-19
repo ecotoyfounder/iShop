@@ -1,0 +1,18 @@
+.parent {
+  @apply m-8 mt-0;
+  .button {
+    @apply btn-primary;
+  }
+  .buttonPrimary {
+    @apply btn-primary;
+  }
+
+  .buttonLight {
+    @apply btn-light;
+  }
+}
+
+.navImg {
+  @apply nav-img;
+}
+
