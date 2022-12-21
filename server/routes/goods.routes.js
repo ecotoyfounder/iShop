@@ -13,6 +13,18 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/:id", async (req, res) => {
+    const {id} = req.params;
+    try {
+        const good = await Good.findById(id);
+        res.status(200).send(good);
+    } catch (e) {
+        res.status(500).json({
+            message: "Server has error. Try later"
+        });
+    }
+});
+
 router.post("/createGood", async (req, res) => {
 
     const good = req.body;

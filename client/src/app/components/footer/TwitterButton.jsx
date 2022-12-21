@@ -1,17 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const FacebookButton = ({src}) => {
+const TwitterButton = ({src}) => {
     return (
-        <a href="https://www.facebook.com/ecotoyofficial/" rel="noreferrer" target="_blank">
+        <a href="client/src/app/components/footer/TwitterButton" rel="noreferrer" target="_blank">
             <img src={src} className="w-9 ml-5 hover:animate-pulse"/>
         </a>
     );
 };
 
-FacebookButton.propTypes = {
+TwitterButton.propTypes = {
     link: PropTypes.string,
     src: PropTypes.string
 };
 
-export default FacebookButton;
+export default TwitterButton;

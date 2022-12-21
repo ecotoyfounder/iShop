@@ -10,6 +10,7 @@ import BackButton from "../components/BackButton";
 import {getCategories} from "../store/categorySlice";
 import useSearch from "../components/Search";
 import searchImg from "./images/Search_ic.png";
+import {getStorage, ref} from "firebase/storage";
 import UploadPhotos from "../components/UploadPhotos";
 
 
@@ -19,6 +20,9 @@ const ShopPage = () => {
     const goods = useSelector(fatchAllGoods());
     const categoriesList = useSelector(getCategories());
     const {searchQuery, handleSearchQuery, filterGoods} = useSearch();
+    const storage = getStorage();
+    const gsReference = ref(storage, "gs://i-shop-34545.appspot.com/files/ABC_Blocks.jpg");
+    console.log(gsReference);
 
     const newGoods = filterGoods(sort.price(toggle, goods), searchQuery);
 
@@ -83,11 +87,10 @@ const ShopPage = () => {
                                 {getNameCategory(item.category)}
                             </div>
                             {item.image}
-
-
                             <div className="flex absolute bottom-5 inset-x-0 mx-5 text-purple-900">
-                                <h3 className="font-bold text-md pt-1">{item.price}€</h3>
-                                <Link to="/cart"><img className="w-10 hover:animate-pulse" src={cartImg}/></Link>
+                                <h3 className="font-bold text-md mr-10 pt-1">{item.price}€</h3>
+                                <Link to="/cart"><img className="w-10 mr-6 justify-center hover:animate-pulse"
+                                                      src={cartImg}/></Link>
                                 <button className="btn-primary w-24 h-8 text-sm" onClick={() => handleAdd(item)}>Add to
                                     Cart
                                 </button>

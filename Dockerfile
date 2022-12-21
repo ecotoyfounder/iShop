@@ -2,17 +2,11 @@ FROM node:18.10.0 as client
 
 WORKDIR /app/client
 
-COPY package.json /app/client
+COPY client/package.json /app/client
 
 RUN npm install
 
-COPY public /app/client
-COPY src /app/client
-COPY .eslintrc.js /app/client
-COPY .gitignore /app/client
-COPY package-lock.json /app/client
-COPY README.md /app/client
-COPY tailwind.config.js /app/client
+COPY client /app/client
 
 RUN npm run build
 

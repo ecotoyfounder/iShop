@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const SelectField = ({label, name, value, options, onChange}) => {
-    // defaultOption
     const handleChange = (e) => {
         const {children} = e.target;
         const {target} = e;
@@ -43,7 +42,6 @@ const SelectField = ({label, name, value, options, onChange}) => {
 };
 
 SelectField.propTypes = {
-    // defaultOption: PropTypes.string,
     label: PropTypes.string,
     name: PropTypes.string,
     value: PropTypes.string,

@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {createGood, getGoodById, updateGood} from "../store/goodSlice";
+import {createGood, updateGood} from "../store/goodSlice";
 import Button from "../components/Button";
 import TextField from "../components/TextField";
 import {useNavigate, useParams} from "react-router-dom";
 import SelectField from "../components/SelectField";
 import {createCategory, deleteCategory, getCategories, updateCategory} from "../store/categorySlice";
-import UploadPhotos from "../components/UploadPhotos";
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import {storage} from "../../firebase/firebase";
+import goodService from "../services/good.service";
+
 
 const CREATE = "create";
 const UPDATE = "update";
@@ -14,11 +17,16 @@ const UPDATE = "update";
 const EditGoodForm = () => {
     const dispatch = useDispatch();
     const {goodId} = useParams();
-    const product = useSelector(getGoodById(goodId));
+    // const product = useSelector(getGoodById(goodId));
+    const [product, setProduct] = useState();
+
     const categories = useSelector(getCategories());
     const navigate = useNavigate();
     const [toggle, setToggle] = useState(false);
     const [typeEvent, setTypeEvent] = useState("");
+    // const [imgUrl, setImgUrl] = useState(null);
+    const [progresspercent, setProgresspercent] = useState(0);
+
     const emptyGood = {
         name: "",
         categoryName: "",
@@ -26,16 +34,20 @@ const EditGoodForm = () => {
         price: "",
         image: ""
     };
-    let init = null;
-    if (product) {
-        const foundCategory = categories.find(item => item._id === product.category);
-        // init = {...product, categoryName: foundCategory.name};
-        init = {...product, categoryName: foundCategory};
 
-    } else {
-        init = emptyGood;
-    }
-    const [data, setData] = useState(init);
+    const [data, setData] = useState(emptyGood);
+
+    useEffect(() => {
+        if (goodId) {
+            goodService.getGoodById(goodId).then(data => {
+                const foundCategory = categories.find(item => item._id === data.category);
+                const init = {...data, categoryName: foundCategory.name};
+                setData(init);
+
+                setProduct(data);
+            });
+        }
+    }, []);
 
     useEffect(() => {
         if (typeEvent === CREATE) {
@@ -58,7 +70,7 @@ const EditGoodForm = () => {
         if (data.category) {
             dispatch(deleteCategory(data.category));
         } else {
-            throw new Error("Не заполнено id категории");
+            throw new Error("Category is required");
         }
     };
 
@@ -75,6 +87,7 @@ const EditGoodForm = () => {
     };
 
     const handleChange = (target) => {
+
         if (target.name !== "category") {
             setData((prevState) => ({
                 ...prevState,
@@ -91,15 +104,56 @@ const EditGoodForm = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const uploadFile = async (e) => {
+
         e.preventDefault();
+
+        const uploadFilePromise = new Promise((res) => {
+
+            const file = e.target["uploadFile"]?.files[0];
+
+            if (!file) return;
+
+            const storageRef = ref(storage, `files/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on("state_changed",
+                (snapshot) => {
+                    const progress =
+                        Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    setProgresspercent(progress);
+                },
+                (error) => {
+                    alert(error);
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+
+                        // setImgUrl(downloadURL);
+                        setData({...data, image: downloadURL});
+
+                        res(downloadURL);
+                    });
+                }
+            );
+
+        });
+
+        return uploadFilePromise;
+
+    };
+
+    const handleSubmit = async (e) => {
+
+        const urlIamge = await uploadFile(e);
 
         const good = {
             name: data.name,
             price: data.price,
             category: data.category,
-            image: data.image
+            image: urlIamge
         };
+
         if (goodId) {
             dispatch(updateGood({_id: data._id, ...good}));
 
@@ -108,9 +162,17 @@ const EditGoodForm = () => {
             navigate(-1);
         }
     };
-    return (
+
+    let renderForm = false;
+    if (goodId && product) {
+        renderForm = true;
+    } else if (!goodId) {
+        renderForm = true;
+    }
+
+    return (renderForm &&
         <div
-            className="m-auto mt-14 text-darkColor text-center p-8 bg-bgDark bg-opacity-10 shadow-lg rounded-3xl text-lg font-bold text-darkColor max-w-xl">
+            className="m-auto mt-14 text-darkColor text-center p-8 bg-bgDark bg-opacity-20 shadow-lg shadow-bgDark rounded-3xl text-lg font-bold text-darkColor max-w-xl">
             <form onSubmit={handleSubmit}>
                 <TextField
                     label="Name"
@@ -173,9 +235,23 @@ const EditGoodForm = () => {
                     value={data.price}
                     onChange={handleChange}
                 />
+                <input type="file"
+                       name="uploadFile"
+                       className="text-darkColor border-none"/>
+
+                {
+                    !data.image &&
+                    <div className="outerbar">
+                        <div className="innerbar" style={{width: `${progresspercent}%`}}>{progresspercent}%</div>
+                    </div>
+                }
+                {
+                    data.image &&
+                    <img src={data.image} alt="uploaded file" height={100}/>
+                }
+
                 <Button>{goodId ? "Update" : "Create"}</Button>
             </form>
-            <UploadPhotos/>
         </div>
     );
 };

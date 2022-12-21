@@ -12,6 +12,14 @@ const goodService = {
             throw new Error(error.response.data.error.message);
         }
     },
+    async getGoodById(id) {
+        try {
+            const {data} = await httpService.get(url + `/${id}`);
+            return data;
+        } catch (error) {
+            throw new Error(error.response.data.error.message);
+        }
+    },
     async createGood(good) {
         try {
             const {data} = await httpService.post(url + "/createGood", good);
