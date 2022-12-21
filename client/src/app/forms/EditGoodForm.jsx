@@ -17,14 +17,12 @@ const UPDATE = "update";
 const EditGoodForm = () => {
     const dispatch = useDispatch();
     const {goodId} = useParams();
-    // const product = useSelector(getGoodById(goodId));
     const [product, setProduct] = useState();
 
     const categories = useSelector(getCategories());
     const navigate = useNavigate();
     const [toggle, setToggle] = useState(false);
     const [typeEvent, setTypeEvent] = useState("");
-    // const [imgUrl, setImgUrl] = useState(null);
     const [progresspercent, setProgresspercent] = useState(0);
 
     const emptyGood = {
@@ -32,7 +30,8 @@ const EditGoodForm = () => {
         categoryName: "",
         category: "",
         price: "",
-        image: ""
+        image: "",
+        description: ""
     };
 
     const [data, setData] = useState(emptyGood);
@@ -108,11 +107,13 @@ const EditGoodForm = () => {
 
         e.preventDefault();
 
-        const uploadFilePromise = new Promise((res) => {
+        const uploadFilePromise = new Promise((res, rej) => {
 
             const file = e.target["uploadFile"]?.files[0];
 
-            if (!file) return;
+            if (!file) {
+                rej("");
+            }
 
             const storageRef = ref(storage, `files/${file.name}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
@@ -129,7 +130,6 @@ const EditGoodForm = () => {
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
 
-                        // setImgUrl(downloadURL);
                         setData({...data, image: downloadURL});
 
                         res(downloadURL);
@@ -144,19 +144,24 @@ const EditGoodForm = () => {
     };
 
     const handleSubmit = async (e) => {
-
-        const urlIamge = await uploadFile(e);
+        let urlImage = "";
+        try {
+            urlImage = await uploadFile(e);
+        } catch (e) {
+            urlImage = data.image;
+        }
 
         const good = {
             name: data.name,
             price: data.price,
             category: data.category,
-            image: urlIamge
+            image: urlImage,
+            description: data.description
         };
 
         if (goodId) {
             dispatch(updateGood({_id: data._id, ...good}));
-
+            navigate(-1);
         } else {
             dispatch(createGood(good));
             navigate(-1);
@@ -189,6 +194,7 @@ const EditGoodForm = () => {
                         options={categories}
                     />
                     <button disabled={!data.category}
+                            type="button"
                             onClick={handleCreateEditCategory}
                             className="pl-2 rounded-md mt-20 text-md w-10 h-10 bg-darkColor text-light text-center"
                     >
@@ -200,6 +206,7 @@ const EditGoodForm = () => {
                         </svg>
                     </button>
                     <button disabled={data.category}
+                            type="button"
                             onClick={handleCreateEditCategory}
                             className="pl-1 rounded-md mt-20 w-10 h-10 bg-darkColor text-light text-center hover:text-green-600 hover:stroke-2"
                     >
@@ -212,6 +219,7 @@ const EditGoodForm = () => {
                     </button>
                     <button disabled={!data.category}
                             onClick={handleDeleteCategory}
+                            type="button"
                             className="pl-2 rounded-md mt-20 text-md w-10 h-10 bg-darkColor text-light text-center"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
@@ -225,7 +233,10 @@ const EditGoodForm = () => {
                     <div>
                         <TextField name="categoryName" label="New name" value={data.categoryName}
                                    onChange={handleChange}/>
-                        <button onClick={handleSaveCategory}>Save</button>
+                        <button onClick={handleSaveCategory}
+                                type="button"
+                        >Save
+                        </button>
                     </div>
                     : null}
                 <TextField
@@ -235,19 +246,30 @@ const EditGoodForm = () => {
                     value={data.price}
                     onChange={handleChange}
                 />
-                <input type="file"
-                       name="uploadFile"
-                       className="text-darkColor border-none"/>
+                <TextField
+                    label="Description"
+                    name="description"
+                    value={data.description}
+                    onChange={handleChange}
+                />
+                <div className="flex mt-10 justify-between">
+                    <label htmlFor={data.name}>Image</label>
+                    <input
+                        type="file"
+                        name="uploadFile"
+                        className="text-darkColor text-center mt-10 border-none"
+                    />
+                </div>
 
                 {
                     !data.image &&
-                    <div className="outerbar">
+                    <div className="outerbar mt-10">
                         <div className="innerbar" style={{width: `${progresspercent}%`}}>{progresspercent}%</div>
                     </div>
                 }
                 {
                     data.image &&
-                    <img src={data.image} alt="uploaded file" height={100}/>
+                    <img src={data.image} alt="uploaded file" className="mt-10"/>
                 }
 
                 <Button>{goodId ? "Update" : "Create"}</Button>

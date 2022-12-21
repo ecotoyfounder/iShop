@@ -4,48 +4,55 @@
     "name": "Russian Alphabet",
     "image": "images/rus-abc.png",
     "price": 29.99,
-    "category": "10000001"
+    "category": "10000001",
+    "description": "Great good!"
   },
   {
     "_id": "00000002",
     "name": "ABC Blocks",
     "image": "/ABC_Blocks.jpg",
     "price": 229.99,
-    "category": "10000002"
+    "category": "10000002",
+    "description": "Great good!"
   },
   {
     "_id": "00000003",
     "name": "Forest Blocks",
     "image": "/Forest_Cub.JPG",
     "price": 299.99,
-    "category": "10000002"
+    "category": "10000002",
+    "description": "Great good!"
   },
   {
     "_id": "00000004",
     "name": "Jungle Blocks",
     "image": "/Chameleon.jpg",
     "price": 299.99,
-    "category": "10000002"
+    "category": "10000002",
+    "description": "Great good!"
   },
   {
     "_id": "00000005",
     "name": "Kitty Eat Teether",
     "image": "/Kitty_eat.JPG",
     "price": 39.99,
-    "category": "10000003"
+    "category": "10000003",
+    "description": "Great good!"
   },
   {
     "_id": "00000006",
     "name": "Typhoon",
     "image": "/Typhoon.jpg",
     "price": 59.99,
-    "category": "10000004"
+    "category": "10000004",
+    "description": "Great good!"
   },
   {
     "_id": "00000007",
     "name": "English Alphabet",
     "image": "/ABC_Cards_Dog.jpg",
     "price": 29.99,
-    "category": "10000001"
+    "category": "10000001",
+    "description": "Great good!"
   }
 ]

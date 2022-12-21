@@ -10,8 +10,6 @@ import BackButton from "../components/BackButton";
 import {getCategories} from "../store/categorySlice";
 import useSearch from "../components/Search";
 import searchImg from "./images/Search_ic.png";
-import {getStorage, ref} from "firebase/storage";
-import UploadPhotos from "../components/UploadPhotos";
 
 
 const ShopPage = () => {
@@ -20,9 +18,6 @@ const ShopPage = () => {
     const goods = useSelector(fatchAllGoods());
     const categoriesList = useSelector(getCategories());
     const {searchQuery, handleSearchQuery, filterGoods} = useSearch();
-    const storage = getStorage();
-    const gsReference = ref(storage, "gs://i-shop-34545.appspot.com/files/ABC_Blocks.jpg");
-    console.log(gsReference);
 
     const newGoods = filterGoods(sort.price(toggle, goods), searchQuery);
 
@@ -40,7 +35,7 @@ const ShopPage = () => {
 
     return (
         <div>
-            <UploadPhotos/>
+
             <div className="flex justify-between">
                 <div className="flex">
                     <BackButton/>
@@ -76,7 +71,7 @@ const ShopPage = () => {
             <div className="grid gap-4 grid-cols-4 mt-10">
                 {newGoods.map(item => (
                     <div key={item._id}
-                         className="shadow-xl  shadow-bgDark relative bg-bgDark bg-opacity-10 rounded-md w-full aspect-square h-96 mt-8 py-4">
+                         className="shadow-xl shadow-bgDark relative bg-bgDark bg-opacity-10 rounded-md w-full aspect-square h-heightC mt-8 py-4">
                         <div className="text-center">
                             <div className="flex justify-between mx-5">
                                 <Link to={`/shop/good/${item._id}`}
@@ -86,12 +81,13 @@ const ShopPage = () => {
                             <div className="text-end text-xl text-darkColor font-semibold mx-5">
                                 {getNameCategory(item.category)}
                             </div>
-                            {item.image}
+                            <img src={item.image} className="mx-auto my-4" width="265px" height="265px"/>
                             <div className="flex absolute bottom-5 inset-x-0 mx-5 text-purple-900">
                                 <h3 className="font-bold text-md mr-10 pt-1">{item.price}€</h3>
-                                <Link to="/cart"><img className="w-10 mr-6 justify-center hover:animate-pulse"
+                                <Link to="/cart"><img className="w-10 ml-7 justify-center hover:animate-pulse"
                                                       src={cartImg}/></Link>
-                                <button className="btn-primary w-24 h-8 text-sm" onClick={() => handleAdd(item)}>Add to
+                                <button className="btn-primary absolute w-20 ml-40 h-8 text-sm"
+                                        onClick={() => handleAdd(item)}>Add to
                                     Cart
                                 </button>
                             </div>

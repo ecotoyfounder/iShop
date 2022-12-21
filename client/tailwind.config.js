@@ -31,6 +31,12 @@ module.exports = {
                 marginLeftXX4: "600px",
                 marginLeftXXX: "640px",
                 marginLeftXXX2: "6800px",
+            },
+            height: {
+                heightC: "440px"
+            },
+            width: {
+                textArea: "600px"
             }
         },
     },

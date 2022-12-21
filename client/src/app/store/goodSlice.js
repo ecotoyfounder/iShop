@@ -38,9 +38,7 @@ const goodSlice = createSlice({
             state.isLoading = false;
             state.entities.forEach((item) => {
                 if (item._id === action.payload._id) {
-                    item.name = action.payload.name;
-                    item.price = action.payload.price;
-                    item.category = action.payload.category;
+                    Object.keys(item).forEach(el => item[el] = action.payload[el]);
                 }
             });
         },
